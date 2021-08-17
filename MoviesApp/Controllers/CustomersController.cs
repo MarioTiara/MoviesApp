@@ -1,5 +1,6 @@
 ﻿using MoviesApp.Models;
 using System.Data.Entity;
+using MoviesApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,16 @@ namespace MoviesApp.Controllers
 		protected override void Dispose(bool disposing)
 		{
 			_context.Dispose();
+		}
+
+		public ActionResult New()
+		{
+			var MembershipTypes = _context.MembershipTypes.ToList();
+			var viewModel = new NewCustomerViewModel
+			{
+				MembershipTypes = MembershipTypes
+			};
+			return View(viewModel);
 		}
 
 		//
