@@ -14,7 +14,7 @@ namespace MoviesApp.Models
         [StringLength(255)]
         public string Name { get; set; }
 
-        [Required]
+        
         public Genre Genre { get; set; }
 
         [Display(Name="Genre")]
