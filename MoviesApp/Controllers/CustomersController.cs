@@ -25,15 +25,32 @@ namespace MoviesApp.Controllers
 		public ActionResult New()
 		{
 			var MembershipTypes = _context.MembershipTypes.ToList();
-			var viewModel = new NewCustomerViewModel
+			var viewModel = new CustomerFormViewModel
 			{
 				MembershipTypes = MembershipTypes
 			};
-			return View(viewModel);
+			return View("CustomerForm", viewModel);
 		}
 
-		//
-		// GET: /Customers/
+		[HttpPost]
+		public ActionResult Save(Customer customer)
+		{
+			if (customer.Id==0)
+				_context.Customer.Add(customer);
+			else
+			{
+				var customerInDb = _context.Customer.Single(c => c.Id == customer.Id);
+				customerInDb.Name = customer.Name;
+				customerInDb.BirthDate = customer.BirthDate;
+				customerInDb.MembershipTypeId = customer.MembershipTypeId;
+				customer.IsSubscirbedToNewsLetter = customer.IsSubscirbedToNewsLetter;
+
+			}
+			_context.SaveChanges();
+
+			return RedirectToAction("Index", "Customers");
+		}
+
 		public ActionResult Index()
 		{
 			var customers = _context.Customer.Include(c=>c.MembershipType).ToList();
@@ -46,6 +63,20 @@ namespace MoviesApp.Controllers
 			if (customer == null)
 				return HttpNotFound();
 			return View(customer);
+		}
+
+		public ActionResult Edit(int id)
+		{
+			var customer = _context.Customer.SingleOrDefault(c => c.Id == id);
+			if (customer == null)
+				return HttpNotFound();
+
+			var viewModel = new CustomerFormViewModel
+			{
+				Customer = customer,
+				MembershipTypes = _context.MembershipTypes.ToList()
+			};
+			return View("CustomerForm", viewModel);
 		}
 
 	}
