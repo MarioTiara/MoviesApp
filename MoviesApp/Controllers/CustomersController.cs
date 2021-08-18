@@ -27,6 +27,7 @@ namespace MoviesApp.Controllers
 			var MembershipTypes = _context.MembershipTypes.ToList();
 			var viewModel = new CustomerFormViewModel
 			{
+                Customer=new Customer(),
 				MembershipTypes = MembershipTypes
 			};
 			return View("CustomerForm", viewModel);
@@ -35,6 +36,16 @@ namespace MoviesApp.Controllers
 		[HttpPost]
 		public ActionResult Save(Customer customer)
 		{
+			if (!ModelState.IsValid)
+			{
+				var viewModel = new CustomerFormViewModel
+				{
+					Customer = customer,
+					MembershipTypes = _context.MembershipTypes.ToList()
+				};
+
+				return View("CustomerForm", viewModel);
+			}
 			if (customer.Id==0)
 				_context.Customer.Add(customer);
 			else
