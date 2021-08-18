@@ -65,6 +65,7 @@ namespace MoviesApp.Controllers
 			return View(customer);
 		}
 
+
 		public ActionResult Edit(int id)
 		{
 			var customer = _context.Customer.SingleOrDefault(c => c.Id == id);

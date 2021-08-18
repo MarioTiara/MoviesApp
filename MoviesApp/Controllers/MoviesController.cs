@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MoviesApp.Models;
+using MoviesApp.ViewModels;
 using System.Data.Entity;
 
 namespace MoviesApp.Controllers
@@ -22,12 +23,25 @@ namespace MoviesApp.Controllers
 		{
 			_context.Dispose();
 		}
-		
+
+	
 		public ViewResult Index()
 		{
 			var movies = _context.Movies.Include(m => m.Genre).ToList();
 			return View(movies);
 		}
+
+		public ActionResult New()
+		{
+			var genres = _context.Genres.ToList();
+			var viewModel = new MovieFormViewModel
+			{
+				Genres = genres
+			};
+
+			return View("MovieForm", viewModel);
+		}
+		
 		
 		public ActionResult Details(int id)
 		{
